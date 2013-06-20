@@ -1,9 +1,25 @@
+################################################
+#                    Grahams Node
+#             This file is the initial router
+# src    <-- All src files
+# dist   <-- f(src), all calculated files
+# vendor <-- all supplied files (calculated on different grunt task as the change less often)
+# 
+# src/assets <-- all public files (still usable on server)
+# 
+#
+################################################
+
 express = require("express")
 
 app = express()
 
+
 app.use(express.logger())
-app.use(express.static(__dirname + './javascripts'));
+
+console.log 'DIR NAME', __dirname
+
+app.use(express.static(__dirname + '/assets'));
 
 app.get('/', (request, response) ->
   templates = require './templates'

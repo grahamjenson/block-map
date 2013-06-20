@@ -7,7 +7,9 @@
 
   app.use(express.logger());
 
-  app.use(express["static"](__dirname + './javascripts'));
+  console.log('DIR NAME', __dirname);
+
+  app.use(express["static"](__dirname + '/assets'));
 
   app.get('/', function(request, response) {
     var templates;

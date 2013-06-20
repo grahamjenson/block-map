@@ -20,7 +20,6 @@ module.exports = (grunt) ->
       options:
         target: 'js'
         language: 'coffee'
-        
 
       server:
         options:
@@ -28,16 +27,16 @@ module.exports = (grunt) ->
 
         expand: true,
         cwd: 'src/'
-        src: '**/*.haml', 
+        src: 'templates/**/*.haml', 
         dest: 'dist/'
-        ext: '-server.js'
+        ext: '.js'
       
       client:
         expand: true,
         cwd: 'src/'
-        src: '**/*.haml', 
-        dest: 'dist/'
-        ext: '-client.js'
+        src: 'templates/**/*.haml', 
+        dest: 'dist/assets/'
+        ext: '.js'
 
     copy:
       vendor:
