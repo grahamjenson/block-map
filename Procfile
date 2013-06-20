@@ -1,1 +1,1 @@
-web: node dist/web.js
+web: node dist/router.js

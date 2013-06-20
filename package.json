@@ -11,7 +11,9 @@
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-haml": "~0.5.0",
     "grunt-contrib-coffee": "~0.7.0",
-    "grunt-contrib-watch": "~0.4.4"
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-contrib-sass": "~0.3.0",
+    "grunt-contrib-copy": "~0.4.1"
   },
   "engines": {
     "node": "0.10.x",
