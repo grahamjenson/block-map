@@ -5,10 +5,7 @@
 
   window.HAML['layout'] = function(context) {
     return (function() {
-      var $c, $e, $o;
-      $e = function(text, escape) {
-        return ("" + text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/\//g, '&#47;').replace(/"/g, '&quot;');
-      };
+      var $c, $o;
       $c = function(text) {
         switch (text) {
           case null:
@@ -23,8 +20,8 @@
       };
       $o = [];
       $o.push("<!DOCTYPE html>\n<html>\n  <head>\n    <title>Block Map</title>\n  </head>\n  <body>");
-      $o.push("    " + $e($c(this.body)));
-      $o.push("  </body>\n  <script src='javascripts/topojson.js'></script>\n</html>");
+      $o.push("    " + $c(this.body()));
+      $o.push("  </body>\n  <script src='javascripts/topojson.js'></script>\n  <script src='javascripts/world-110m.js'></script>\n  <script src='javascripts/underscore.js'></script>\n  <script src='javascripts/backbone.js'></script>\n  <script src=''></script>\n</html>");
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '');
     }).call(context);
   };

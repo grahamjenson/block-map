@@ -2,14 +2,24 @@ module.exports = (grunt) ->
   # Project configuration.
   grunt.initConfig(
     coffee: 
-      all: 
+      app: 
         expand: true,
         cwd: 'src/'
         src: '**/*.coffee', 
         dest: 'dist/'
         ext: '.js'
+      vendor:
+        expand: true,
+        cwd: 'vendor/'
+        src: '**/*.coffee', 
+        dest: 'dist/'
+        ext: '.js'        
+
     sass:
-      all: 
+      options:
+        loadPath: ['vendor/assets/stylesheets']
+
+      app: 
         expand: true,
         cwd: 'src/'
         src: '**/*.sass', 
@@ -23,8 +33,8 @@ module.exports = (grunt) ->
 
       server:
         options:
-          namespace: 'process.HAML'
-
+          namespace: 'module.exports'
+          name: 't'
         expand: true,
         cwd: 'src/'
         src: 'templates/**/*.haml', 
@@ -44,26 +54,37 @@ module.exports = (grunt) ->
           [
             expand: true,
             cwd: 'vendor/'
-            src: '**/*', 
+            src: ['**/*.js', '**/*.css', '**/*.png'], 
             dest: 'dist/'
           ]
-    watch:
-      coffee:
-        files: ['src/**/*.coffee']
-        tasks: 'coffee'
 
+    watch:
+      #COFFEE
+      app_coffee:
+        files: ['src/**/*.coffee']
+        tasks: 'coffee:app'
+
+      v_coffee:
+        files: ['vendor/**/*.coffee']
+        tasks: 'coffee:vendor'
+
+      #SASS
+      app_sass:
+        files: ['src/**/*.sass']
+        tasks: 'sass:app'
+      
+      #HAML
       haml:
         files: ['src/**/*.haml']
         tasks: 'haml'
 
       copy:
-        files: ['vendor/**/*']
+        files: ['vendor/**/*.js', 'vendor/**/*.css', 'vendor/**/*.png']
         tasks: 'copy'
 
-      sass:
-        files: ['src/**/*.sass']
-        tasks: 'sass'
+
   );
+
   #TODO move over all js files in src to the dir in dist
   #TODO compile haml assets to javascript
   #TODO compile sass assets to css

@@ -11,24 +11,18 @@
 ################################################
 
 express = require("express")
+templates = require './templates'
 
 app = express()
-
-
 app.use(express.logger())
-
-console.log 'DIR NAME', __dirname
-
 app.use(express.static(__dirname + '/assets'));
 
 app.get('/', (request, response) ->
-  templates = require './templates'
-  response.send(process.HAML.layout(body: 'body template'))
+  response.send(templates.layout(body: templates.block_map))
 )
 
 
 port = process.env.PORT || 3000
-
 app.listen(port, ->
   console.log("Listening on " + port)
 )

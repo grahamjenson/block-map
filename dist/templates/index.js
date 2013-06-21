@@ -1,12 +1,14 @@
 (function() {
-  console.log('require templates dir');
+  var f, files, tem, _i, _len;
 
-  if (typeof window === 'object') {
-    require("./layout-client.js");
-  } else {
-    require("./layout-server.js");
+  files = ['layout', 'block_map'];
+
+  for (_i = 0, _len = files.length; _i < _len; _i++) {
+    f = files[_i];
+    tem = require("./" + f);
+    if (tem.t) {
+      module.exports[f] = tem.t;
+    }
   }
-
-  return exports;
 
 }).call(this);
