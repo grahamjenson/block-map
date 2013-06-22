@@ -7,8 +7,8 @@
     return (function() {
       var $o;
       $o = [];
-      $o.push("<h1>asd</h1>");
-      return $o.join("\n");
+      $o.push("<div id='container'></div>");
+      return $o.join("\n").replace(/\s(?:id|class)=(['"])(\1)/mg, "");
     }).call(context);
   };
 

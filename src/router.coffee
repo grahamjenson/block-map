@@ -13,12 +13,24 @@
 express = require("express")
 templates = require './templates'
 
+
 app = express()
 app.use(express.logger())
 app.use(express.static(__dirname + '/assets'));
 
+
+js = () ->
+  jss = ['jquery','topojson', 'world-110m', 'underscore','backbone', 'block_map','map_view', 'd3']
+  templates.javascripts(files: jss)
+
+ss = () ->
+  sss = ['base']
+  templates.stylesheets(files: sss)
+
+
 app.get('/', (request, response) ->
-  response.send(templates.layout(body: templates.block_map))
+  console.log templates
+  response.send(templates.layout(body: templates.block_map, javascripts: js, stylesheets: ss))
 )
 
 

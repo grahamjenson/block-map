@@ -5,7 +5,10 @@
 
   module.exports['t'] = function(context) {
     return (function() {
-      var $c, $o;
+      var $c, $e, $o, f, _i, _len, _ref;
+      $e = function(text, escape) {
+        return ("" + text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/\//g, '&#47;').replace(/"/g, '&quot;');
+      };
       $c = function(text) {
         switch (text) {
           case null:
@@ -19,13 +22,11 @@
         }
       };
       $o = [];
-      $o.push("<!DOCTYPE html>\n<html>\n  <head>\n    <title>Block Map</title>");
-      $o.push("    " + $c(this.stylesheets()));
-      $o.push("  </head>\n  <body>");
-      $o.push("    " + $c(this.body()));
-      $o.push("  </body>");
-      $o.push("  " + $c(this.javascripts()));
-      $o.push("</html>");
+      _ref = this.files;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        f = _ref[_i];
+        $o.push("<link href='stylesheets/" + ($e($c(f))) + ".css' media='all' rel='stylesheet' type='text/css'>");
+      }
       return $o.join("\n").replace(/\s(\w+)='true'/mg, ' $1').replace(/\s(\w+)='false'/mg, '');
     }).call(context);
   };
