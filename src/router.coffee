@@ -19,6 +19,7 @@ app.use(express.logger())
 app.use(express.static(__dirname + '/assets'));
 
 
+
 js = () ->
   jss = ['jquery','topojson', 'world-110m', 'underscore','backbone', 'block_map','map_view', 'd3']
   templates.javascripts(files: jss)

@@ -17,23 +17,31 @@
     };
 
     MapView.prototype.render = function() {
-      var box, canvas, count, h, height, l, multi_polygon, path, projection, row, t, tex, v, w, width, x, xdivs, xsize, y, ydivs, ysize, _i, _j;
+      var bounds, box, canvas, count, h, height, l, multi_polygon, path, projection, row, t, tex, v, w, width, x, xdivs, xsize, y, ydivs, ysize, _i, _j;
       width = $(window).width();
       height = $(window).height();
-      projection = d3.geo.equirectangular().scale(300).translate([width / 2, height / 2]).rotate([-180, 0]);
+      projection = d3.geo.equirectangular().scale(150).translate([width / 2, height / 2]).rotate([-180, 0]);
+      this.projection = projection;
       multi_polygon = topojson.object(worldtopo, worldtopo.objects.land);
-      canvas = d3.select("body").append("canvas").attr("width", width).attr("height", height);
+      this.multi_polygon = multi_polygon;
+      canvas = d3.select("body").append("canvas").attr("width", width - 10).attr("height", height - 10);
       this.context = canvas.node().getContext("2d");
       path = d3.geo.path().projection(projection).context(this.context);
+      bounds = path.bounds(multi_polygon);
+      while (bounds[0][0] > 100 || bounds[0][1] > 100) {
+        projection.scale(projection.scale() + 25);
+        bounds = path.bounds(multi_polygon);
+      }
+      this.path = path;
       path(multi_polygon);
       this.context.fillStyle = '#000000FF';
       this.context.strokeStyle = '#000000FF';
       this.context.fill();
       this.context.stroke();
-      xsize = 12;
-      ysize = 12;
-      xdivs = width / xsize;
-      ydivs = height / ysize;
+      xsize = 15;
+      ysize = 15;
+      xdivs = ~~(width / xsize) - 1;
+      ydivs = ~~(height / ysize) - 1;
       for (y = _i = 0; 0 <= ydivs ? _i <= ydivs : _i >= ydivs; y = 0 <= ydivs ? ++_i : --_i) {
         row = $("<div id='" + y + "_row'></div>").appendTo(this.el);
         for (x = _j = 0; 0 <= xdivs ? _j <= xdivs : _j >= xdivs; x = 0 <= xdivs ? ++_j : --_j) {
@@ -42,7 +50,7 @@
           t = y * ysize;
           h = ysize;
           w = xsize;
-          box.css('left', l).css('top', 0).css('width', w).css('height', h).data({
+          box.css('left', l).css('top', -ysize).css('width', w).css('height', h).data({
             top: t
           });
           v = this.average_color(this.context.getImageData(l, t, h, w)).a;
@@ -70,7 +78,7 @@
           return $(box).animate({
             top: "+=" + t
           }, 700);
-        }, Math.random() * 4000);
+        }, (Math.random() * 4000) + 300);
       });
     };
 

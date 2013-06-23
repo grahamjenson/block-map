@@ -9,21 +9,31 @@ class BlockMap.Views.MapView extends Backbone.View
     height = $(window).height()
 
     projection = d3.geo.equirectangular()
-      .scale(300)
+      .scale(150)
       .translate([width/2,height/2])
       .rotate([-180,0]);
 
+    @projection = projection
+
     multi_polygon = topojson.object(worldtopo, worldtopo.objects.land)
 
+    @multi_polygon = multi_polygon
+
     canvas = d3.select("body").append("canvas")
-      .attr("width", width)
-      .attr("height", height)
+      .attr("width", width-10)
+      .attr("height", height-10)
 
     @context = canvas.node().getContext("2d");
 
     path = d3.geo.path()
       .projection(projection)
       .context(@context);
+    
+    bounds = path.bounds(multi_polygon) 
+    while bounds[0][0] > 100 or bounds[0][1] > 100
+      projection.scale(projection.scale() + 25)
+      bounds = path.bounds(multi_polygon)
+    @path = path
 
     path(multi_polygon);
     
@@ -33,10 +43,10 @@ class BlockMap.Views.MapView extends Backbone.View
     @context.fill();
     @context.stroke();
     
-    xsize = 12
-    ysize = 12
-    xdivs = width/xsize
-    ydivs = height/ysize
+    xsize = 15
+    ysize = 15
+    xdivs = ~~(width/xsize)-1
+    ydivs = ~~(height/ysize)-1
     for y in [0..ydivs]
       row = $("<div id='#{y}_row'></div>").appendTo(@el)
       for x in [0..xdivs]
@@ -45,7 +55,7 @@ class BlockMap.Views.MapView extends Backbone.View
         t = y*ysize
         h = ysize
         w = xsize
-        box.css('left', l).css('top',0).css('width',w).css('height',h).data({top: t})
+        box.css('left', l).css('top',-ysize).css('width',w).css('height',h).data({top: t})
         v = @average_color(@context.getImageData(l,t,h,w)).a
 
         tex = $("<div></div>").appendTo(box)
@@ -67,7 +77,7 @@ class BlockMap.Views.MapView extends Backbone.View
       setTimeout( ->
         t = $(box).data().top
         $(box).animate({top: "+=#{t}"},700)
-      , Math.random() * 4000
+      , (Math.random() * 4000) + 300
       );  
     )
             
