@@ -33,8 +33,8 @@ class BlockMap.Views.MapView extends Backbone.View
     @context.fill();
     @context.stroke();
     
-    xsize = 50
-    ysize = 50
+    xsize = 12
+    ysize = 12
     xdivs = width/xsize
     ydivs = height/ysize
     for y in [0..ydivs]
@@ -45,11 +45,32 @@ class BlockMap.Views.MapView extends Backbone.View
         t = y*ysize
         h = ysize
         w = xsize
-        box.css('left', l).css('top',0).css('width',w).css('height',h)
+        box.css('left', l).css('top',0).css('width',w).css('height',h).data({top: t})
         v = @average_color(@context.getImageData(l,t,h,w)).a
-        box.animate({top: "+=#{t}"},1000+(y*20) + (x*20))
-        if v > 70
-          box.addClass('land')
+
+        tex = $("<div></div>").appendTo(box)
+        if v > 50
+          tex.addClass('land')
+          if v > 200
+            tex.addClass('large')
+          else if v > 150
+            tex.addClass('medium')
+          else
+            tex.addClass('small')
+        else
+          tex.addClass('water')
+          box.css('top',t)
+    
+    count = 0
+    $('.land').parent().each((i, box) ->
+      count += 1
+      setTimeout( ->
+        t = $(box).data().top
+        $(box).animate({top: "+=#{t}"},700)
+      , Math.random() * 4000
+      );  
+    )
+            
 
   average_color: (data) ->
     #http://stackoverflow.com/questions/2541481/get-average-color-of-image-via-javascript

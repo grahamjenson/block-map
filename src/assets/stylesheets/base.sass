@@ -3,9 +3,32 @@
 canvas
   display: none
 
+#container
+
+
 .block
   position: absolute
   margin: 0px
   padding: 0px
-  &.land
-    background-color: #000
+  .land
+    position: relative
+    @include box-shadow(0 1px 3px rgba(0,0,0,1))
+  .large
+    background-color: rgba(0,0,0,1)
+    width: 90%
+    height: 90%
+    top: 5%
+    left: 5%
+  .medium
+    background-color: rgba(0,0,0,.7)
+    width: 70%
+    height: 70%
+    top: 15%
+    left: 15%  
+
+  .small
+    background-color: rgba(0,0,0,.5)
+    width: 50%
+    height: 50%
+    top: 25%
+    left: 25%    

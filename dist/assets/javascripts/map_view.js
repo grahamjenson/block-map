@@ -17,7 +17,7 @@
     };
 
     MapView.prototype.render = function() {
-      var box, canvas, h, height, l, multi_polygon, path, projection, row, t, v, w, width, x, xdivs, xsize, y, ydivs, ysize, _i, _results;
+      var box, canvas, count, h, height, l, multi_polygon, path, projection, row, t, tex, v, w, width, x, xdivs, xsize, y, ydivs, ysize, _i, _j;
       width = $(window).width();
       height = $(window).height();
       projection = d3.geo.equirectangular().scale(300).translate([width / 2, height / 2]).rotate([-180, 0]);
@@ -30,37 +30,48 @@
       this.context.strokeStyle = '#000000FF';
       this.context.fill();
       this.context.stroke();
-      xsize = 50;
-      ysize = 50;
+      xsize = 12;
+      ysize = 12;
       xdivs = width / xsize;
       ydivs = height / ysize;
-      _results = [];
       for (y = _i = 0; 0 <= ydivs ? _i <= ydivs : _i >= ydivs; y = 0 <= ydivs ? ++_i : --_i) {
         row = $("<div id='" + y + "_row'></div>").appendTo(this.el);
-        _results.push((function() {
-          var _j, _results1;
-          _results1 = [];
-          for (x = _j = 0; 0 <= xdivs ? _j <= xdivs : _j >= xdivs; x = 0 <= xdivs ? ++_j : --_j) {
-            box = $("<div id='" + x + "_col' class='block' ></div>").appendTo(row);
-            l = x * xsize;
-            t = y * ysize;
-            h = ysize;
-            w = xsize;
-            box.css('left', l).css('top', 0).css('width', w).css('height', h);
-            v = this.average_color(this.context.getImageData(l, t, h, w)).a;
-            box.animate({
-              top: "+=" + t
-            }, 1000 + (y * 20) + (x * 20));
-            if (v > 70) {
-              _results1.push(box.addClass('land'));
+        for (x = _j = 0; 0 <= xdivs ? _j <= xdivs : _j >= xdivs; x = 0 <= xdivs ? ++_j : --_j) {
+          box = $("<div id='" + x + "_col' class='block' ></div>").appendTo(row);
+          l = x * xsize;
+          t = y * ysize;
+          h = ysize;
+          w = xsize;
+          box.css('left', l).css('top', 0).css('width', w).css('height', h).data({
+            top: t
+          });
+          v = this.average_color(this.context.getImageData(l, t, h, w)).a;
+          tex = $("<div></div>").appendTo(box);
+          if (v > 50) {
+            tex.addClass('land');
+            if (v > 200) {
+              tex.addClass('large');
+            } else if (v > 150) {
+              tex.addClass('medium');
             } else {
-              _results1.push(void 0);
+              tex.addClass('small');
             }
+          } else {
+            tex.addClass('water');
+            box.css('top', t);
           }
-          return _results1;
-        }).call(this));
+        }
       }
-      return _results;
+      count = 0;
+      return $('.land').parent().each(function(i, box) {
+        count += 1;
+        return setTimeout(function() {
+          t = $(box).data().top;
+          return $(box).animate({
+            top: "+=" + t
+          }, 700);
+        }, Math.random() * 4000);
+      });
     };
 
     MapView.prototype.average_color = function(data) {

@@ -4859,5 +4859,26 @@ canvas {
   position: absolute;
   margin: 0px;
   padding: 0px; }
-  .block.land {
-    background-color: black; }
+  .block .land {
+    position: relative;
+    -webkit-box-shadow: 0 1px 3px black;
+    -moz-box-shadow: 0 1px 3px black;
+    box-shadow: 0 1px 3px black; }
+  .block .large {
+    background-color: black;
+    width: 90%;
+    height: 90%;
+    top: 5%;
+    left: 5%; }
+  .block .medium {
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 70%;
+    height: 70%;
+    top: 15%;
+    left: 15%; }
+  .block .small {
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 50%;
+    height: 50%;
+    top: 25%;
+    left: 25%; }
