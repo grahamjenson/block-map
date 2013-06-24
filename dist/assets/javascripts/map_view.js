@@ -17,10 +17,10 @@
     };
 
     MapView.prototype.render = function() {
-      var bounds, box, canvas, count, h, height, l, multi_polygon, path, projection, row, t, tex, v, w, width, x, xdivs, xsize, y, ydivs, ysize, _i, _j;
+      var bounds, box, canvas, h, height, l, multi_polygon, path, projection, row, t, tex, v, w, width, x, xdivs, xsize, y, ydivs, ysize, _i, _j;
       width = $(window).width();
       height = $(window).height();
-      projection = d3.geo.equirectangular().scale(150).translate([width / 2, height / 2]).rotate([-180, 0]);
+      projection = d3.geo.equirectangular().scale(500).translate([width / 2, height / 2]).rotate([-180, 0]);
       this.projection = projection;
       multi_polygon = topojson.object(worldtopo, worldtopo.objects.land);
       this.multi_polygon = multi_polygon;
@@ -70,15 +70,13 @@
           }
         }
       }
-      count = 0;
       return $('.land').parent().each(function(i, box) {
-        count += 1;
         return setTimeout(function() {
           t = $(box).data().top;
           return $(box).animate({
             top: "+=" + t
-          }, 700);
-        }, (Math.random() * 4000) + 300);
+          }, 500);
+        }, (Math.random() * 2000) + 300);
       });
     };
 

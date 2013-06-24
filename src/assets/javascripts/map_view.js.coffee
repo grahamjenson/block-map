@@ -9,7 +9,7 @@ class BlockMap.Views.MapView extends Backbone.View
     height = $(window).height()
 
     projection = d3.geo.equirectangular()
-      .scale(150)
+      .scale(500)
       .translate([width/2,height/2])
       .rotate([-180,0]);
 
@@ -29,11 +29,14 @@ class BlockMap.Views.MapView extends Backbone.View
       .projection(projection)
       .context(@context);
     
+
+    ######AUTO SCALE KEEP INCREASING BOUNDS TILL IT IS CLOSE
     bounds = path.bounds(multi_polygon) 
     while bounds[0][0] > 100 or bounds[0][1] > 100
       projection.scale(projection.scale() + 25)
       bounds = path.bounds(multi_polygon)
     @path = path
+    #####
 
     path(multi_polygon);
     
@@ -71,13 +74,11 @@ class BlockMap.Views.MapView extends Backbone.View
           tex.addClass('water')
           box.css('top',t)
     
-    count = 0
     $('.land').parent().each((i, box) ->
-      count += 1
       setTimeout( ->
         t = $(box).data().top
-        $(box).animate({top: "+=#{t}"},700)
-      , (Math.random() * 4000) + 300
+        $(box).animate({top: "+=#{t}"},500)
+      , (Math.random() * 2000) + 300
       );  
     )
             
