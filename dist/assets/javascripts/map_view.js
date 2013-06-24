@@ -17,10 +17,13 @@
     };
 
     MapView.prototype.render = function() {
-      var bounds, box, canvas, h, height, l, multi_polygon, path, projection, row, t, tex, v, w, width, x, xdivs, xsize, y, ydivs, ysize, _i, _j;
+      var bounds, box, canvas, h, height, l, multi_polygon, path, projection, rotatex, rotatey, row, scale, t, tex, v, w, width, x, xdivs, xsize, y, ydivs, ysize, _i, _j;
       width = $(window).width();
       height = $(window).height();
-      projection = d3.geo.equirectangular().scale(500).translate([width / 2, height / 2]).rotate([-180, 0]);
+      scale = getURLParameter('scale') || 150;
+      rotatex = getURLParameter('x') || -180;
+      rotatey = getURLParameter('y') || 0;
+      projection = d3.geo.equirectangular().scale(scale).translate([width / 2, height / 2]).rotate([rotatex, rotatey]);
       this.projection = projection;
       multi_polygon = topojson.object(worldtopo, worldtopo.objects.land);
       this.multi_polygon = multi_polygon;

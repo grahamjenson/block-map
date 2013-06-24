@@ -8,10 +8,14 @@ class BlockMap.Views.MapView extends Backbone.View
     width = $(window).width()
     height = $(window).height()
 
+    scale = getURLParameter('scale') || 150
+    rotatex = getURLParameter('x') || -180
+    rotatey = getURLParameter('y') || 0
+
     projection = d3.geo.equirectangular()
-      .scale(500)
+      .scale(scale)
       .translate([width/2,height/2])
-      .rotate([-180,0]);
+      .rotate([rotatex,rotatey]);
 
     @projection = projection
 

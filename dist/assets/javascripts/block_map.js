@@ -14,6 +14,10 @@
     }
   };
 
+  window.getURLParameter = function(name) {
+    return decodeURI((RegExp(name + '=' + '(.+?)(&|$)').exec(location.search) || [null])[1]);
+  };
+
   BlockMap.Routers.BlockMapRouter = (function(_super) {
     __extends(BlockMapRouter, _super);
 
