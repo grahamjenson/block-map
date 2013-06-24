@@ -17,13 +17,14 @@
     };
 
     MapView.prototype.render = function() {
-      var bounds, box, canvas, h, height, l, multi_polygon, path, projection, rotatex, rotatey, row, scale, t, tex, v, w, width, x, xdivs, xsize, y, ydivs, ysize, _i, _j;
+      var bounds, box, canvas, h, height, l, multi_polygon, path, projection, row, rx, ry, scale, size, t, tex, v, w, width, x, xdivs, xsize, y, ydivs, ysize, _i, _j;
       width = $(window).width();
       height = $(window).height();
-      scale = getURLParameter('scale') || 150;
-      rotatex = getURLParameter('x') || -180;
-      rotatey = getURLParameter('y') || 0;
-      projection = d3.geo.equirectangular().scale(scale).translate([width / 2, height / 2]).rotate([rotatex, rotatey]);
+      scale = parseInt(getURLParameter('scale')) || 150;
+      rx = parseFloat(getURLParameter('lon')) || -180;
+      ry = parseFloat(getURLParameter('lat')) || 0;
+      size = parseInt(getURLParameter('blocksize')) || 20;
+      projection = d3.geo.equirectangular().scale(scale).translate([width / 2, height / 2]).rotate([rx, ry]);
       this.projection = projection;
       multi_polygon = topojson.object(worldtopo, worldtopo.objects.land);
       this.multi_polygon = multi_polygon;
@@ -41,8 +42,8 @@
       this.context.strokeStyle = '#000000FF';
       this.context.fill();
       this.context.stroke();
-      xsize = 15;
-      ysize = 15;
+      xsize = size;
+      ysize = size;
       xdivs = ~~(width / xsize) - 1;
       ydivs = ~~(height / ysize) - 1;
       for (y = _i = 0; 0 <= ydivs ? _i <= ydivs : _i >= ydivs; y = 0 <= ydivs ? ++_i : --_i) {

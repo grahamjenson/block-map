@@ -13,7 +13,7 @@
 
   js = function() {
     var jss;
-    jss = ['jquery', 'topojson', 'world-110m', 'underscore', 'backbone', 'block_map', 'map_view', 'd3'];
+    jss = ['jquery', 'topojson', 'world-50m', 'underscore', 'backbone', 'block_map', 'map_view', 'd3'];
     return templates.javascripts({
       files: jss
     });

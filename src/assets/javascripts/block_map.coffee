@@ -8,9 +8,7 @@ window.BlockMap =
     Backbone.history.start()
 
 window.getURLParameter = (name) ->
-  return decodeURI(
-      (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[null])[1]
-  );
+  return (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[null,null])[1]
 
 class BlockMap.Routers.BlockMapRouter extends Backbone.Router
   routes:

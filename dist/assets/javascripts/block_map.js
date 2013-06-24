@@ -15,7 +15,7 @@
   };
 
   window.getURLParameter = function(name) {
-    return decodeURI((RegExp(name + '=' + '(.+?)(&|$)').exec(location.search) || [null])[1]);
+    return (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search) || [null, null])[1];
   };
 
   BlockMap.Routers.BlockMapRouter = (function(_super) {
