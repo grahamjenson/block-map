@@ -1,5 +1,5 @@
 (function() {
-  var app, express, js, port, ss, templates;
+  var app, express, js, port, ss, temp, templates;
 
   express = require("express");
 
@@ -27,12 +27,21 @@
     });
   };
 
+  temp = function() {
+    var ttt;
+    ttt = ['download_btn'];
+    return templates.templates({
+      files: ttt
+    });
+  };
+
   app.get('/', function(request, response) {
     console.log(templates);
     return response.send(templates.layout({
       body: templates.block_map,
       javascripts: js,
-      stylesheets: ss
+      stylesheets: ss,
+      templates: temp
     }));
   });
 

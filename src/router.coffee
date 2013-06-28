@@ -19,7 +19,6 @@ app.use(express.logger())
 app.use(express.static(__dirname + '/assets'));
 
 
-
 js = () ->
   jss = ['jquery','topojson', 'world-50m', 'underscore','backbone', 'block_map','map_view', 'd3']
   templates.javascripts(files: jss)
@@ -28,10 +27,13 @@ ss = () ->
   sss = ['base']
   templates.stylesheets(files: sss)
 
+temp = () ->
+  ttt = ['download_btn']
+  templates.templates(files: ttt)
 
 app.get('/', (request, response) ->
   console.log templates
-  response.send(templates.layout(body: templates.block_map, javascripts: js, stylesheets: ss))
+  response.send(templates.layout(body: templates.block_map, javascripts: js, stylesheets: ss, templates: temp))
 )
 
 

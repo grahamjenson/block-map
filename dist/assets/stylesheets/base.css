@@ -4852,6 +4852,14 @@ a.label:hover, a.label:focus, a.badge:hover, a.badge:focus {
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
+.alert {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  margin-bottom: 0px;
+  width: 90%; }
+
 canvas {
   display: none; }
 

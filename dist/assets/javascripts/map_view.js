@@ -17,13 +17,26 @@
     };
 
     MapView.prototype.render = function() {
-      var bounds, box, canvas, h, height, l, multi_polygon, path, projection, row, rx, ry, scale, size, t, tex, v, w, width, x, xdivs, xsize, y, ydivs, ysize, _i, _j;
+      var bounds, box, canvas, h, height, l, large, medium, multi_polygon, p1, p2, p3, p4, path, projection, ps, row, rx, ry, scale, sen, size, small, t, tex, v, w, width, x, xdivs, xsize, y, ydivs, ysize, _i, _j;
       width = $(window).width();
       height = $(window).height();
+      this.smallgj = {
+        "type": "MultiPolygon",
+        "coordinates": []
+      };
+      this.mediumgj = {
+        "type": "MultiPolygon",
+        "coordinates": []
+      };
+      this.largegj = {
+        "type": "MultiPolygon",
+        "coordinates": []
+      };
       scale = parseInt(getURLParameter('scale')) || 150;
       rx = parseFloat(getURLParameter('lon')) || -180;
       ry = parseFloat(getURLParameter('lat')) || 0;
       size = parseInt(getURLParameter('blocksize')) || 20;
+      sen = parseFloat(getURLParameter('sen')) || 1.0;
       projection = d3.geo.equirectangular().scale(scale).translate([width / 2, height / 2]).rotate([rx, ry]);
       this.projection = projection;
       multi_polygon = topojson.object(worldtopo, worldtopo.objects.land);
@@ -42,6 +55,9 @@
       this.context.strokeStyle = '#000000FF';
       this.context.fill();
       this.context.stroke();
+      small = Math.min(254, 76 * sen);
+      medium = Math.min(254, 150 * sen);
+      large = Math.min(254, 230 * sen);
       xsize = size;
       ysize = size;
       xdivs = ~~(width / xsize) - 1;
@@ -58,15 +74,23 @@
             top: t
           });
           v = this.average_color(this.context.getImageData(l, t, h, w)).a;
+          p1 = projection.invert([l, t]);
+          p2 = projection.invert([l + w, t]);
+          p3 = projection.invert([l + w, t + h]);
+          p4 = projection.invert([l, t + h]);
+          ps = [[p1, p2, p3, p4, p1]];
           tex = $("<div></div>").appendTo(box);
-          if (v > 50) {
+          if (v > small) {
             tex.addClass('land');
-            if (v > 200) {
+            if (v > large) {
               tex.addClass('large');
-            } else if (v > 150) {
+              this.largegj.coordinates.push(ps);
+            } else if (v > medium) {
               tex.addClass('medium');
+              this.mediumgj.coordinates.push(ps);
             } else {
               tex.addClass('small');
+              this.smallgj.coordinates.push(ps);
             }
           } else {
             tex.addClass('water');
@@ -74,7 +98,7 @@
           }
         }
       }
-      return $('.land').parent().each(function(i, box) {
+      $('.land').parent().each(function(i, box) {
         return setTimeout(function() {
           t = $(box).data().top;
           return $(box).animate({
@@ -82,6 +106,14 @@
           }, 500);
         }, (Math.random() * 2000) + 300);
       });
+      this.geojson = {
+        "type": "GeometryCollection",
+        "geometries": [this.smallgj, this.mediumgj, this.largegj]
+      };
+      return $('.downloads').prepend(window.HAML.download_btn({
+        name: 'GeoJSON',
+        text: JSON.stringify(this.geojson)
+      }));
     };
 
     MapView.prototype.average_color = function(data) {

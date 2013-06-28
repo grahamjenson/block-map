@@ -8,10 +8,27 @@ class BlockMap.Views.MapView extends Backbone.View
     width = $(window).width()
     height = $(window).height()
     
+    @smallgj = {
+      "type": "MultiPolygon",
+      "coordinates" : []
+    }
+    
+    @mediumgj = {
+      "type": "MultiPolygon",
+      "coordinates" : []
+    }
+
+    @largegj = {
+      "type": "MultiPolygon",
+      "coordinates" : []
+    }
+
+
     scale = parseInt(getURLParameter('scale')) || 150
     rx = parseFloat(getURLParameter('lon')) || -180
     ry = parseFloat(getURLParameter('lat')) || 0
     size = parseInt(getURLParameter('blocksize')) || 20
+    sen = parseFloat(getURLParameter('sen')) || 1.0
 
     projection = d3.geo.equirectangular()
       .scale(scale)
@@ -51,6 +68,10 @@ class BlockMap.Views.MapView extends Backbone.View
     @context.fill();
     @context.stroke();
     
+    small = Math.min(254,(76*sen))
+    medium = Math.min(254,(150*sen))
+    large = Math.min(254,(230*sen))
+
     xsize = size
     ysize = size
     xdivs = ~~(width/xsize)-1
@@ -65,16 +86,24 @@ class BlockMap.Views.MapView extends Backbone.View
         w = xsize
         box.css('left', l).css('top',-ysize).css('width',w).css('height',h).data({top: t})
         v = @average_color(@context.getImageData(l,t,h,w)).a
-
+        
+        p1 = projection.invert([l,t])
+        p2 = projection.invert([l+w,t])
+        p3 = projection.invert([l+w,t+h])
+        p4 = projection.invert([l,t+h])
+        ps = [[p1, p2, p3, p4, p1]]
         tex = $("<div></div>").appendTo(box)
-        if v > 50
+        if v > small
           tex.addClass('land')
-          if v > 200
+          if v > large
             tex.addClass('large')
-          else if v > 150
+            @largegj.coordinates.push(ps)
+          else if v > medium
             tex.addClass('medium')
+            @mediumgj.coordinates.push(ps)
           else
             tex.addClass('small')
+            @smallgj.coordinates.push(ps)
         else
           tex.addClass('water')
           box.css('top',t)
@@ -86,7 +115,13 @@ class BlockMap.Views.MapView extends Backbone.View
       , (Math.random() * 2000) + 300
       );  
     )
-            
+    
+    @geojson = { 
+      "type": "GeometryCollection",
+      "geometries": [@smallgj, @mediumgj, @largegj]
+    }
+
+    $('.downloads').prepend(window.HAML.download_btn({name: 'GeoJSON', text: JSON.stringify(@geojson)}))     
 
   average_color: (data) ->
     #http://stackoverflow.com/questions/2541481/get-average-color-of-image-via-javascript
