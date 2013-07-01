@@ -36,7 +36,6 @@
   };
 
   app.get('/', function(request, response) {
-    console.log(templates);
     return response.send(templates.layout({
       body: templates.block_map,
       javascripts: js,

@@ -37,6 +37,10 @@
       ry = parseFloat(getURLParameter('lat')) || 0;
       size = parseInt(getURLParameter('blocksize')) || 20;
       sen = parseFloat(getURLParameter('sen')) || 1.0;
+      this.gridobject = {
+        'size': size,
+        grid: []
+      };
       projection = d3.geo.equirectangular().scale(scale).translate([width / 2, height / 2]).rotate([rx, ry]);
       this.projection = projection;
       multi_polygon = topojson.object(worldtopo, worldtopo.objects.land);
@@ -79,6 +83,10 @@
           p3 = projection.invert([l + w, t + h]);
           p4 = projection.invert([l, t + h]);
           ps = [[p1, p2, p3, p4, p1]];
+          this.gridobject.grid.push({
+            'latlon': [p1, p3],
+            'xy': [l, t]
+          });
           tex = $("<div></div>").appendTo(box);
           if (v > small) {
             tex.addClass('land');
@@ -110,9 +118,13 @@
         "type": "GeometryCollection",
         "geometries": [this.smallgj, this.mediumgj, this.largegj]
       };
-      return $('.downloads').prepend(window.HAML.download_btn({
+      $('.downloads').prepend(window.HAML.download_btn({
         name: 'GeoJSON',
         text: JSON.stringify(this.geojson)
+      }));
+      return $('.downloads').prepend(window.HAML.download_btn({
+        name: 'GridObject',
+        text: JSON.stringify(this.gridobject)
       }));
     };
 

@@ -30,6 +30,11 @@ class BlockMap.Views.MapView extends Backbone.View
     size = parseInt(getURLParameter('blocksize')) || 20
     sen = parseFloat(getURLParameter('sen')) || 1.0
 
+    @gridobject = {
+      'size' : size,
+      grid : []
+    }
+
     projection = d3.geo.equirectangular()
       .scale(scale)
       .translate([width/2,height/2])
@@ -92,6 +97,8 @@ class BlockMap.Views.MapView extends Backbone.View
         p3 = projection.invert([l+w,t+h])
         p4 = projection.invert([l,t+h])
         ps = [[p1, p2, p3, p4, p1]]
+        @gridobject.grid.push({'latlon': [p1,p3], 'xy' : [l,t] })
+
         tex = $("<div></div>").appendTo(box)
         if v > small
           tex.addClass('land')
@@ -122,6 +129,7 @@ class BlockMap.Views.MapView extends Backbone.View
     }
 
     $('.downloads').prepend(window.HAML.download_btn({name: 'GeoJSON', text: JSON.stringify(@geojson)}))     
+    $('.downloads').prepend(window.HAML.download_btn({name: 'GridObject', text: JSON.stringify(@gridobject)}))
 
   average_color: (data) ->
     #http://stackoverflow.com/questions/2541481/get-average-color-of-image-via-javascript

@@ -32,7 +32,6 @@ temp = () ->
   templates.templates(files: ttt)
 
 app.get('/', (request, response) ->
-  console.log templates
   response.send(templates.layout(body: templates.block_map, javascripts: js, stylesheets: ss, templates: temp))
 )
 
