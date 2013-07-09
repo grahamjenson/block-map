@@ -84,7 +84,25 @@
           p4 = projection.invert([l, t + h]);
           ps = [[p1, p2, p3, p4, p1]];
           this.gridobject.grid.push({
-            'latlon': [p1, p3],
+            'latlon': [
+              (function() {
+                var _k, _len, _results;
+                _results = [];
+                for (_k = 0, _len = p1.length; _k < _len; _k++) {
+                  x = p1[_k];
+                  _results.push(parseFloat(x.toFixed(3)));
+                }
+                return _results;
+              })(), (function() {
+                var _k, _len, _results;
+                _results = [];
+                for (_k = 0, _len = p3.length; _k < _len; _k++) {
+                  x = p3[_k];
+                  _results.push(parseFloat(x.toFixed(3)));
+                }
+                return _results;
+              })()
+            ],
             'xy': [l, t]
           });
           tex = $("<div></div>").appendTo(box);
