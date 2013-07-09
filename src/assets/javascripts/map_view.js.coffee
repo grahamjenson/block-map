@@ -97,10 +97,10 @@ class BlockMap.Views.MapView extends Backbone.View
         p3 = projection.invert([l+w,t+h])
         p4 = projection.invert([l,t+h])
         ps = [[p1, p2, p3, p4, p1]]
-        @gridobject.grid.push({'latlon': [(parseFloat(x.toFixed(3)) for x in p1),(parseFloat(x.toFixed(3)) for x in p3)] , 'xy' : [l,t] })
 
         tex = $("<div></div>").appendTo(box)
         if v > small
+          @gridobject.grid.push({'latlon': [(parseFloat(x.toFixed(3)) for x in p1),(parseFloat(x.toFixed(3)) for x in p3)] , 'xy' : [l,t], 'ac' : v})
           tex.addClass('land')
           if v > large
             tex.addClass('large')

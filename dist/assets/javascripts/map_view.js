@@ -83,30 +83,31 @@
           p3 = projection.invert([l + w, t + h]);
           p4 = projection.invert([l, t + h]);
           ps = [[p1, p2, p3, p4, p1]];
-          this.gridobject.grid.push({
-            'latlon': [
-              (function() {
-                var _k, _len, _results;
-                _results = [];
-                for (_k = 0, _len = p1.length; _k < _len; _k++) {
-                  x = p1[_k];
-                  _results.push(parseFloat(x.toFixed(3)));
-                }
-                return _results;
-              })(), (function() {
-                var _k, _len, _results;
-                _results = [];
-                for (_k = 0, _len = p3.length; _k < _len; _k++) {
-                  x = p3[_k];
-                  _results.push(parseFloat(x.toFixed(3)));
-                }
-                return _results;
-              })()
-            ],
-            'xy': [l, t]
-          });
           tex = $("<div></div>").appendTo(box);
           if (v > small) {
+            this.gridobject.grid.push({
+              'latlon': [
+                (function() {
+                  var _k, _len, _results;
+                  _results = [];
+                  for (_k = 0, _len = p1.length; _k < _len; _k++) {
+                    x = p1[_k];
+                    _results.push(parseFloat(x.toFixed(3)));
+                  }
+                  return _results;
+                })(), (function() {
+                  var _k, _len, _results;
+                  _results = [];
+                  for (_k = 0, _len = p3.length; _k < _len; _k++) {
+                    x = p3[_k];
+                    _results.push(parseFloat(x.toFixed(3)));
+                  }
+                  return _results;
+                })()
+              ],
+              'xy': [l, t],
+              'ac': v
+            });
             tex.addClass('land');
             if (v > large) {
               tex.addClass('large');
